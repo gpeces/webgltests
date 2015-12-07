@@ -93,7 +93,7 @@ function initTextures()
 	cubeTexture = gl.createTexture();
 	cubeImage = new Image();
 	cubeImage.onload = function() { handleTextureLoaded(cubeImage, cubeTexture); }
-	cubeImage.src = "kiwi_cartoon.png";
+	cubeImage.src = "../common/pics/kiwi_cartoon.png";
 }
 
 function handleTextureLoaded(image, texture) 
@@ -122,7 +122,7 @@ function initShaders()
 
 	if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) 
 	{
-	alert("Unable to initialize the shader program.");
+        alert("Unable to initialize the shader program.");
 	}
 
 	gl.useProgram(shaderProgram);
