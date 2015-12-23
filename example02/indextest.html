@@ -92,8 +92,10 @@
             //player
             var playersphere = new THREE.SphereGeometry( 3, 32, 32 );
             var materialplayer = Physijs.createMaterial(new THREE.MeshLambertMaterial({color: 0x00ff00}), 0.1, 0.1);
-            var player = new Physijs.SphereMesh( playersphere, materialplayer, undefined, 1.0 );
-            player.position.set (10,5,0);
+            var player = new Physijs.BoxMesh( playersphere, materialplayer, 0 );
+            player.position.set (10,10,0);
+            player.castShadow = true;
+			player.receiveShadow = true;
             scene.add( player );
             
             document.addEventListener(
@@ -101,13 +103,38 @@
 			function( ev ) {
 				switch( ev.keyCode ) {
 					case 37:
+                    case 65:
 						// Left
-                        player.position.x -=0.5;
+                        player.position.x -= 0.5;                        
+                        player.__dirtyPosition = true;
                         break;
-					case 37:
-						// Left
-                        player.position.x +=0.5;
+					case 39:
+                    case 68:
+						// Right
+                        player.position.x += 0.5;
+                        player.__dirtyPosition = true;
                         break;
+                    case 38:
+                    case 87:
+						// Up
+                        player.position.y += 0.5;                        
+                        player.__dirtyPosition = true;
+                        break;
+                    case 40:
+                    case 83:
+						// Down
+                        player.position.y -= 0.5;                        
+                        player.__dirtyPosition = true;
+                        break;
+                    case 81: //q
+                        player.position.z -= 0.5;                        
+                        player.__dirtyPosition = true;
+                        break;
+                    case 69: //e
+                        player.position.z += 0.5;                        
+                        player.__dirtyPosition = true;
+                        break;
+                        
                    }
                 }
             );
@@ -116,6 +143,7 @@
             var mass = 1;
             var NUM = 2;
             var geometry = new THREE.BoxGeometry(size, size, size);
+            
             for (var i = 0; i < NUM; i++) 
             {
                 var material1 = Physijs.createMaterial(new THREE.MeshLambertMaterial({color: 0x992222 + i * 0x3333}), 0.1, 0.1);
@@ -123,13 +151,13 @@
                 base.add(new THREE.AxisHelper(size));
                 var satellite = new Physijs.BoxMesh(geometry, material1, mass);
                 base.position.set(
-                        size * 6 * (i - NUM / 2),
-                        size * i + size * 2,
+                        size * 3 * (i - NUM / 2),
+                        20,
                         0
                 );
                 satellite.add(new THREE.AxisHelper(size));
                 satellite.position.copy(base.position);
-                satellite.position.y += size * 2;
+                satellite.position.y -= size * 2;
                 /*satellite.rotation.set(
                         i * Math.PI / 7,
                         i * Math.PI / 7,
